@@ -1,10 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<form class="text-center" method="post"  action="/home/connect">
+@model Credential
+<form class="text-center" method="post"  action="@((Model == null)? Url.Action("Connect") : Url.Action("Edit"))">
     <label>Email</label>
-    <input type="text" name="Email" />
+    <input type="text" name="Email" value="@Model?.Email"/>
     <label>Password</label>
-    <input type="text" name="Password" />
+    <input type="text" name="Password" value="@Model?.Password"/> 
     <input type="submit" value="Connect" />
 </form>
