@@ -32,7 +32,6 @@ namespace AnfoldTask.Services
 
         }
 
-        [HttpPost]
         public async Task<IEnumerable<Invoice>> GetInvoiceReports()
         {
             var body = new
@@ -56,10 +55,9 @@ namespace AnfoldTask.Services
             //throw new HttpRequestException("Authentication faild at API endpoint");
 
             var invoiceReport = await response.Content.ReadAsStringAsync();
-            var invoices = JsonConvert.DeserializeObject<string[][]>(invoiceReport);
-            //Convert from string[][] to IEnumerable<invoice>
-            throw new NotImplementedException("Needs to convert array result to IEnumerable of Invoices.");
-            //return invoices;
+            var deserializedInvoices = JsonConvert.DeserializeObject<string[][]>(invoiceReport);
+            var result = deserializedInvoices.Select(a => new Invoice(a[0], a[1], decimal.Parse(a[2])));
+            return result;
         }
     }
 }

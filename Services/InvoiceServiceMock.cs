@@ -32,18 +32,13 @@ namespace AnfoldTask.Services
             new Invoice("13", "Facebook", 1200M),
         };
 
-
-
-        [HttpPost]
         public async Task<IEnumerable<Invoice>> GetInvoiceReports()
         {
             var invoiceArray = invoices.Select(i => new[] { i.InvoiceNumber, i.CompanyName, i.InvoiceTotal.ToString() }).ToArray();
             var serialisedInvoiceArray = JsonConvert.SerializeObject(invoiceArray);
-            var deserializeInvoices = (IEnumerable<Invoice>)JsonConvert.DeserializeObject(serialisedInvoiceArray, typeof(IEnumerable<Invoice>));
-            //typeof(Invoice).GetProperties(BindingFlags.);
-            //var invoiceArray = invoices.To2DArray(x=>x.InvoiceNumber.ToString(), x=>x.CompanyName.ToString(), x=>x.InvoiceTotal.ToString());
-            return deserializeInvoices;
+            var deserializedInvoices = JsonConvert.DeserializeObject<string[][]>(serialisedInvoiceArray);
+            var result = deserializedInvoices.Select(a => new Invoice(a[0], a[1], decimal.Parse(a[2])));
+            return result;
         }
-      
     }
 }
