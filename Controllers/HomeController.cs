@@ -15,11 +15,13 @@ namespace AnfoldTask.Controllers
     {
         private readonly ILogger<HomeController> logger;
         private readonly IAuthenticationService authenticationService;
+        private readonly IInvoiceService invoiceService;
 
-        public HomeController(ILogger<HomeController> logger, IAuthenticationService authenticationService)
+        public HomeController(ILogger<HomeController> logger, IAuthenticationService authenticationService, IInvoiceService invoiceService)
         {
             this.logger = logger;
             this.authenticationService = authenticationService;
+            this.invoiceService = invoiceService;
         }
 
         public IActionResult Index()
@@ -28,9 +30,12 @@ namespace AnfoldTask.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Connect(Credential user)
+        public async Task<IActionResult> Connect(Credential credential)
         {
-          return await authenticationService.GetAutenticationToken(user);
+            if (authenticationService.HasToken == false)
+                await authenticationService.Authenticate(credential);
+            var reports = await invoiceService.GetInvoiceReports();
+            return View("~/Views/Home/Invoice.cshtml", reports);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

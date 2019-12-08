@@ -34,9 +34,9 @@ namespace AnfoldTask.Services
         public string GetToken()
         {
             if (HasToken)
-                throw new InvalidOperationException("Authenticate with remote API to acquire a token");
-            else
                 return token;
+            else
+                throw new InvalidOperationException("Authenticate with remote API to acquire a token");
         }
 
         public async Task<string> Authenticate(Credential credential)
@@ -52,7 +52,7 @@ namespace AnfoldTask.Services
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
                 throw new HttpRequestException("Authentication faild at API endpoint");
 
-            token = await response.Content.ReadAsStringAsync();
+            token = (await response.Content.ReadAsStringAsync()).Trim('"');
             return token;
         }
     }

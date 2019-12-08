@@ -1,0 +1,23 @@
+﻿@using AnfoldTask.Models
+@model List<Invoice>
+<h2>Invoices list</h2>
+<table style="border:1px solid black;width:70%;">
+    <thead>
+        <tr style="background: lightgray;line-height: 2;">
+            <th>Invoice number</th>
+            <th>Company name</th>
+            <th>Invoice total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var invoice in Model)
+        {
+            <tr style="">
+                <td style="padding:5px;border-right: 1px solid lightgrey;border-bottom: 1px solid lightgrey;">@invoice.InvoiceNumber</td>
+                <td style="padding:5px;border-right: 1px solid lightgrey;border-bottom: 1px solid lightgrey;">@invoice.CompanyName</td>
+                <td style="padding:5px;border-right: 1px solid lightgrey;border-bottom: 1px solid lightgrey;">£@invoice.InvoiceTotal.ToString("0.00")</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
